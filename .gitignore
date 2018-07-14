@@ -2,3 +2,6 @@
 /DBUtility.Core/bin
 /CommonLibrary.Core/obj
 /CommonLibrary.Core/bin
+/CommonLibrary.Core/*.user
+/UnitTest/bin
+/UnitTest/obj
