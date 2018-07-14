@@ -1,13 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 
 namespace hwj.CommonLibrary.Function
 {
     public class ConnectionString
     {
         #region MSSQL
+        /// <summary>
+        /// 生成数据库连接字符串
+        /// </summary>
+        /// <param name="server"></param>
+        /// <param name="database"></param>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <param name="isWindowsVerification"></param>
+        /// <returns></returns>
         public static string GetMSSQLConnectionString(string server, string database, string user, string password, bool isWindowsVerification)
         {
             SqlConnectionStringBuilder connStrBuilder = GetMSSQLConnectionStringBuilder(server, database, user, password, isWindowsVerification, null);
@@ -15,10 +21,20 @@ namespace hwj.CommonLibrary.Function
                 return connStrBuilder.ToString();
             return string.Empty;
         }
+        /// <summary>
+        /// 生成SqlConnectionStringBuilder
+        /// </summary>
+        /// <param name="server"></param>
+        /// <param name="database"></param>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <param name="isWindowsVerification"></param>
+        /// <returns></returns>
         public static SqlConnectionStringBuilder GetMSSQLConnectionStringBuilder(string server, string database, string user, string password, bool isWindowsVerification)
         {
             return GetMSSQLConnectionStringBuilder(server, database, user, password, isWindowsVerification, null);
         }
+
         private static SqlConnectionStringBuilder GetMSSQLConnectionStringBuilder(string server, string database, string user, string password, bool isWindowsVerification, int? connectTimeout)
         {
             SqlConnectionStringBuilder connStrBuilder = new SqlConnectionStringBuilder();
@@ -35,6 +51,7 @@ namespace hwj.CommonLibrary.Function
 
             return connStrBuilder;
         }
-        #endregion
+
+        #endregion MSSQL
     }
 }

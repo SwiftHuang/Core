@@ -1,6 +1,5 @@
-using System;
-using System.Configuration;
 using System.Collections.Generic;
+using System.Configuration;
 
 namespace hwj.CommonLibrary.Object
 {
@@ -10,6 +9,7 @@ namespace hwj.CommonLibrary.Object
         {
             return ConfigurationManager.ConnectionStrings[key].ConnectionString;
         }
+
         public static Dictionary<string, string> GetConnectionStrings(string[] keys)
         {
             Dictionary<string, string> ret = new Dictionary<string, string>();
@@ -17,10 +17,12 @@ namespace hwj.CommonLibrary.Object
                 ret[k] = GetConnectionString(k);
             return ret;
         }
+
         public static string GetAppSetting(string key)
         {
             return GetAppSetting(key, "");
         }
+
         public static string GetAppSetting(string key, string defaultValue)
         {
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[key]))
@@ -28,6 +30,7 @@ namespace hwj.CommonLibrary.Object
             else
                 return defaultValue;
         }
+
         public static Dictionary<string, string> GetAppSettings(string[] keys)
         {
             Dictionary<string, string> ret = new Dictionary<string, string>();
@@ -35,6 +38,7 @@ namespace hwj.CommonLibrary.Object
                 ret[k] = GetAppSetting(k);
             return ret;
         }
+
         //public static int GetIntergerSetting(string key)
         //{
         //    return NumberHelper.ToInt(GetAppSetting(key), 0);

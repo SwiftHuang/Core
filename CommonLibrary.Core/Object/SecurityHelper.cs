@@ -7,19 +7,20 @@ namespace hwj.CommonLibrary.Object
     public class SecurityHelper
     {
         #region 加密模块
-        /// <summary> 
-        /// 加密数据 
-        /// </summary> 
-        /// <param name="Text"></param> 
-        /// <param name="sKey"></param> 
-        /// <returns></returns> 
+
+        /// <summary>
+        /// 加密数据
+        /// </summary>
+        /// <param name="Text"></param>
+        /// <param name="sKey"></param>
+        /// <returns></returns>
         public static string Encrypt(string Text, string sKey)
         {
             DESCryptoServiceProvider des = new DESCryptoServiceProvider();
             byte[] inputByteArray;
             inputByteArray = Encoding.Default.GetBytes(Text);
-            des.Key = ASCIIEncoding.ASCII.GetBytes(System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(sKey, "md5").Substring(0, 8));
-            des.IV = ASCIIEncoding.ASCII.GetBytes(System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(sKey, "md5").Substring(0, 8));
+            des.Key = ASCIIEncoding.ASCII.GetBytes(MD5(sKey).Substring(0, 8));
+            des.IV = ASCIIEncoding.ASCII.GetBytes(MD5(sKey).Substring(0, 8));
             System.IO.MemoryStream ms = new System.IO.MemoryStream();
             CryptoStream cs = new CryptoStream(ms, des.CreateEncryptor(), CryptoStreamMode.Write);
             cs.Write(inputByteArray, 0, inputByteArray.Length);
@@ -27,18 +28,17 @@ namespace hwj.CommonLibrary.Object
             StringBuilder ret = new StringBuilder();
             foreach (byte b in ms.ToArray())
             {
-
                 ret.AppendFormat("{0:X2}", b);
             }
             return ret.ToString();
         }
 
-        /// <summary> 
-        /// 解密数据 
-        /// </summary> 
-        /// <param name="Text"></param> 
-        /// <param name="sKey"></param> 
-        /// <returns></returns> 
+        /// <summary>
+        /// 解密数据
+        /// </summary>
+        /// <param name="Text"></param>
+        /// <param name="sKey"></param>
+        /// <returns></returns>
         public static string Decrypt(string Text, string sKey)
         {
             DESCryptoServiceProvider des = new DESCryptoServiceProvider();
@@ -51,14 +51,28 @@ namespace hwj.CommonLibrary.Object
                 i = Convert.ToInt32(Text.Substring(x * 2, 2), 16);
                 inputByteArray[x] = (byte)i;
             }
-            des.Key = ASCIIEncoding.ASCII.GetBytes(System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(sKey, "md5").Substring(0, 8));
-            des.IV = ASCIIEncoding.ASCII.GetBytes(System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(sKey, "md5").Substring(0, 8));
+            des.Key = ASCIIEncoding.ASCII.GetBytes(MD5(sKey).Substring(0, 8));
+            des.IV = ASCIIEncoding.ASCII.GetBytes(MD5(sKey).Substring(0, 8));
             System.IO.MemoryStream ms = new System.IO.MemoryStream();
             CryptoStream cs = new CryptoStream(ms, des.CreateDecryptor(), CryptoStreamMode.Write);
             cs.Write(inputByteArray, 0, inputByteArray.Length);
             cs.FlushFinalBlock();
             return Encoding.Default.GetString(ms.ToArray());
         }
-        #endregion
+
+        private static string MD5(string str)
+        {
+            //微软md5方法参考return FormsAuthentication.HashPasswordForStoringInConfigFile(str, "md5");
+            byte[] b = Encoding.Default.GetBytes(str);
+            b = new MD5CryptoServiceProvider().ComputeHash(b);
+            string ret = "";
+            for (int i = 0; i < b.Length; i++)
+            {
+                ret += b[i].ToString("X").PadLeft(2, '0');
+            }
+            return ret;
+        }
+
+        #endregion 加密模块
     }
 }
