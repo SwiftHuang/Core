@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>hwj.CommonLibrary.Core</AssemblyName>
+    <RootNamespace>hwj.CommonLibrary.Core</RootNamespace>
+    <Version>2.0.3.0</Version>
+    <!-- <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion> -->
+    <Authors>Swift Huang</Authors>
+    <Description>常用公共方法汇总</Description>
+    <PackageProjectUrl>https://github.com/SwiftHuang/Core/tree/master/CommonLibrary.Core</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,6 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="RabbitMQ.Client" Version="5.1.0" />
     <PackageReference Include="System.CodeDom" Version="4.5.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.5.1" />
     <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
