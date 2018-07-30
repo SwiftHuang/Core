@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RabbitMQ.Client.Framing;
 using System;
 using System.Text;
 
@@ -18,8 +19,19 @@ namespace hwj.CommonLibrary.Core.Object
 
             return factory;
         }
-
-        public static void PublishMsg(RabbitMQSetting mqSetting, QueueSetting qSetting, object msg)
+        public static void PublishMsg<T>(RabbitMQSetting mqSetting, QueueSetting qSetting, T msg)
+        {
+            PublishMsg<T>(mqSetting, qSetting, null, msg);
+        }
+        public static void PublishMsgForEasyNetQ<T>(RabbitMQSetting mqSetting, QueueSetting qSetting, T msg)
+        {
+            BasicProperties bp = new BasicProperties()
+            {
+                Type = RemoveAssemblyDetails(typeof(T).AssemblyQualifiedName)
+            };
+            PublishMsg<T>(mqSetting, qSetting, bp, msg);
+        }
+        public static void PublishMsg<T>(RabbitMQSetting mqSetting, QueueSetting qSetting, BasicProperties basicProperties, T msg)
         {
             ConnectionFactory factory = InitMQConn(mqSetting);
 
@@ -54,7 +66,7 @@ namespace hwj.CommonLibrary.Core.Object
                 channel.BasicPublish(
                     exchange: qSetting.ExchangeName,
                     routingKey: qSetting.RoutingKey,
-                    basicProperties: null,
+                    basicProperties: basicProperties,
                     body: data);
             }
         }
@@ -108,7 +120,49 @@ namespace hwj.CommonLibrary.Core.Object
             };
             string consumerTag = channel.BasicConsume(qSetting.QueueName, false, c);
         }
+        private static string RemoveAssemblyDetails(string fullyQualifiedTypeName)
+        {
+            var builder = new StringBuilder(fullyQualifiedTypeName.Length);
 
+            // loop through the type name and filter out qualified assembly details from nested type names
+            var writingAssemblyName = false;
+            var skippingAssemblyDetails = false;
+            foreach (var character in fullyQualifiedTypeName)
+            {
+                switch (character)
+                {
+                    case '[':
+                        writingAssemblyName = false;
+                        skippingAssemblyDetails = false;
+                        builder.Append(character);
+                        break;
+                    case ']':
+                        writingAssemblyName = false;
+                        skippingAssemblyDetails = false;
+                        builder.Append(character);
+                        break;
+                    case ',':
+                        if (!writingAssemblyName)
+                        {
+                            writingAssemblyName = true;
+                            builder.Append(character);
+                        }
+                        else
+                        {
+                            skippingAssemblyDetails = true;
+                        }
+                        break;
+                    default:
+                        if (!skippingAssemblyDetails)
+                        {
+                            builder.Append(character);
+                        }
+                        break;
+                }
+            }
+
+            return builder.ToString();
+        }
         public class RabbitMQSetting
         {
             public string UserName { get; set; }
@@ -141,5 +195,6 @@ namespace hwj.CommonLibrary.Core.Object
             public BasicDeliverEventArgs EventArgs { get; set; }
             public T Data { get; set; }
         }
+
     }
 }
