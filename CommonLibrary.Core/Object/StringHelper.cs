@@ -393,7 +393,7 @@ namespace hwj.CommonLibrary.Object
                 sb.Append(tmpStr + text);
             }
 
-            public string ToString()
+            public new string ToString()
             {
                 return sb.ToString();
             }

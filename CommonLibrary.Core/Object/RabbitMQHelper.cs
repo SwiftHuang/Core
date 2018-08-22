@@ -100,21 +100,24 @@ namespace hwj.CommonLibrary.Core.Object
                     Channel = channel,
                     EventArgs = ea,
                 };
+
+                args.Data = new DataInfo<T>();
                 try
                 {
                     var msg = Encoding.UTF8.GetString(ea.Body);
                     if (typeof(T).Name != "String")
                     {
-                        args.Data = JsonConvert.DeserializeObject<T>(msg);
+                        args.Data.Value = JsonConvert.DeserializeObject<T>(msg);
                     }
                     else
                     {
-                        args.Data = msg as T;
+                        args.Data.Value = msg as T;
                     }
                 }
                 catch (Exception ex)
                 {
-
+                    args.Data.DeserializeSuccess = false;
+                    args.Data.ExceptionInfo = ex;
                 }
                 action(args);
             };
@@ -183,18 +186,26 @@ namespace hwj.CommonLibrary.Core.Object
             public string QueueName { get; set; }
             public bool QueueDurable { get; set; }
             public string RoutingKey { get; set; }
-
             public QueueSetting()
             {
             }
         }
-
         public class ActionArgs<T> where T : class
         {
             public IModel Channel { get; set; }
             public BasicDeliverEventArgs EventArgs { get; set; }
-            public T Data { get; set; }
+            public DataInfo<T> Data { get; set; }
         }
+        public class DataInfo<T> where T : class
+        {
+            public T Value { get; set; }
+            public bool DeserializeSuccess { get; set; }
+            public Exception ExceptionInfo { get; set; }
 
+            public DataInfo()
+            {
+                DeserializeSuccess = true;
+            }
+        }
     }
 }

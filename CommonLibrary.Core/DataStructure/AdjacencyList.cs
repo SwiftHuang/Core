@@ -161,7 +161,7 @@ namespace hwj.CommonLibrary.DataStructure
         }
         private PathList<T> Search(Vertex<T> from, Vertex<T> to, List<VertexRelation<T>> relation, List<Vertex<T>> passed, ref List<T> path)
         {
-            Predicate<AdjacencyList<T>.VertexRelation<T>> test = delegate(AdjacencyList<T>.VertexRelation<T> p) { return p.Vertex.Equals(from); };
+            Predicate<AdjacencyList<T>.VertexRelation<T>> test = delegate (AdjacencyList<T>.VertexRelation<T> p) { return p.Vertex.Equals(from); };
             PathList<T> result = new AdjacencyList<T>.PathList<T>();
 
             passed.Add(from);
@@ -257,7 +257,7 @@ namespace hwj.CommonLibrary.DataStructure
                 Value = new List<P>();
             }
         }
-        public class PathList<T> : List<Path<T>>
+        public class PathList<P> : List<Path<P>>
         { }
         #endregion
 

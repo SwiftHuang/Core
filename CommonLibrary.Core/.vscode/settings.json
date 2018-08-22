@@ -1,0 +1,17 @@
+{
+    "editor.formatOnSave": true,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/out": true,
+        "**/obj": true,
+        "**/Exe": true,
+        "**/bin": true,
+        "**/temp": true,
+        "**/logs": true,
+        "**/nupkgs": true,
+    }
+}
