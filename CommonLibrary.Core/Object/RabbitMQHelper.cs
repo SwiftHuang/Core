@@ -99,9 +99,9 @@ namespace hwj.CommonLibrary.Core.Object
                 {
                     Channel = channel,
                     EventArgs = ea,
+                    Data= new DataInfo<T>(),
                 };
 
-                args.Data = new DataInfo<T>();
                 try
                 {
                     var msg = Encoding.UTF8.GetString(ea.Body);
