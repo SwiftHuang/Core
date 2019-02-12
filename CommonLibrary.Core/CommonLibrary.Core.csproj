@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>hwj.CommonLibrary.Core</AssemblyName>
     <RootNamespace>hwj.CommonLibrary.Core</RootNamespace>
-    <Version>2.0.5.0</Version>
+    <Version>2.0.7.0</Version>
     <!-- <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <FileVersion>2.0.0.0</FileVersion> -->
     <Authors>Swift Huang</Authors>

@@ -99,7 +99,7 @@ namespace hwj.CommonLibrary.Core.Object
                 {
                     Channel = channel,
                     EventArgs = ea,
-                    Data= new DataInfo<T>(),
+                    Data = new DataInfo<T>(),
                 };
 
                 try
@@ -123,6 +123,7 @@ namespace hwj.CommonLibrary.Core.Object
             };
             string consumerTag = channel.BasicConsume(qSetting.QueueName, false, c);
         }
+
         private static string RemoveAssemblyDetails(string fullyQualifiedTypeName)
         {
             var builder = new StringBuilder(fullyQualifiedTypeName.Length);
@@ -166,6 +167,7 @@ namespace hwj.CommonLibrary.Core.Object
 
             return builder.ToString();
         }
+
         public class RabbitMQSetting
         {
             public string UserName { get; set; }
@@ -175,6 +177,45 @@ namespace hwj.CommonLibrary.Core.Object
 
             public RabbitMQSetting()
             {
+            }
+
+            public RabbitMQSetting(string connectionString)
+            {
+                if (!string.IsNullOrWhiteSpace(connectionString))
+                {
+                    string[] connectionStringSplit = connectionString.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var conSettingStr in connectionStringSplit)
+                    {
+                        string[] conSettingStrSplit = conSettingStr.Split('=');
+                        if (conSettingStrSplit.Length > 1)
+                        {
+                            string settingType = conSettingStrSplit[0].Trim();
+                            string settingValue = string.Empty;
+                            for (int i = 1; i < conSettingStrSplit.Length; i++)
+                            {
+                                settingValue += conSettingStrSplit[i] + '=';
+                            }
+                            settingValue = settingValue.Remove(settingValue.Length - 1).Trim();
+
+                            if (settingType.Equals("host", StringComparison.OrdinalIgnoreCase))
+                            {
+                                HostName = settingValue;
+                            }
+                            else if (settingType.Equals("virtualHost", StringComparison.OrdinalIgnoreCase))
+                            {
+                                VirtualHost = settingValue;
+                            }
+                            else if (settingType.Equals("username", StringComparison.OrdinalIgnoreCase))
+                            {
+                                UserName = settingValue;
+                            }
+                            else if (settingType.Equals("password", StringComparison.OrdinalIgnoreCase))
+                            {
+                                Password = settingValue;
+                            }
+                        }
+                    }
+                }
             }
         }
 
