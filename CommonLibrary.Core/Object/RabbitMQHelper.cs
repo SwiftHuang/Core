@@ -19,14 +19,22 @@ namespace hwj.CommonLibrary.Core.Object
 
             return factory;
         }
-        public static void PublishMsg<T>(RabbitMQSetting mqSetting, QueueSetting qSetting, T msg)
-        {
-            PublishMsg<T>(mqSetting, qSetting, null, msg);
-        }
-        public static void PublishMsgForEasyNetQ<T>(RabbitMQSetting mqSetting, QueueSetting qSetting, T msg)
+        public static void PublishMsg<T>(RabbitMQSetting mqSetting, QueueSetting qSetting, T msg, bool persistent = true)
         {
             BasicProperties bp = new BasicProperties()
             {
+                //队列持久化
+                Persistent = persistent
+            };
+
+            PublishMsg<T>(mqSetting, qSetting, bp, msg);
+        }
+        public static void PublishMsgForEasyNetQ<T>(RabbitMQSetting mqSetting, QueueSetting qSetting, T msg, bool persistent = true)
+        {
+            BasicProperties bp = new BasicProperties()
+            {
+                //队列持久化
+                Persistent = persistent,
                 Type = RemoveAssemblyDetails(typeof(T).AssemblyQualifiedName)
             };
             PublishMsg<T>(mqSetting, qSetting, bp, msg);
@@ -91,6 +99,7 @@ namespace hwj.CommonLibrary.Core.Object
                 queue: qSetting.QueueName,
                 exchange: qSetting.ExchangeName,
                 routingKey: qSetting.RoutingKey);
+
 
             EventingBasicConsumer c = new EventingBasicConsumer(channel);
             c.Received += (ch, ea) =>
