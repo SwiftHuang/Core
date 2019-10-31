@@ -85,5 +85,19 @@
             }
             return str.Trim();
         }
+
+        /// <summary>
+        /// 检查当前 System.String 对象是否数字.(通过正则检查)
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static bool IsNumber(this string str)
+        {
+            if(!string.IsNullOrEmpty(str))
+            {
+                return NumberHelper.IsNumeric(str);
+            }
+            return false;
+        }
     }
 }

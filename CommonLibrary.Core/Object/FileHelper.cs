@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Text;
+using System.Threading;
 
 namespace hwj.CommonLibrary.Object
 {
@@ -57,9 +57,19 @@ namespace hwj.CommonLibrary.Object
 
         public static string ReadFile(string fileName)
         {
-            using (StreamReader sr = new StreamReader(fileName, System.Text.Encoding.Default))
+            while (true)
             {
-                return sr.ReadToEnd();
+                try
+                {
+                    using (StreamReader sr = new StreamReader(fileName, System.Text.Encoding.Default))
+                    {
+                        return sr.ReadToEnd();
+                    }
+                }
+                catch
+                {
+                    Thread.Sleep(100);
+                }
             }
         }
 
@@ -222,8 +232,6 @@ namespace hwj.CommonLibrary.Object
         #endregion 文件操作
 
         #region 文件转换
-
-     
 
         /// <summary>
         /// 将 Stream 写入文件
