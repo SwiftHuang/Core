@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>hwj.CommonLibrary.Core</AssemblyName>
     <RootNamespace>hwj.CommonLibrary.Core</RootNamespace>
     <Version>2.0.11</Version>
